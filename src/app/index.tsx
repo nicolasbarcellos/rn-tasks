@@ -1,5 +1,9 @@
 import { View, StatusBar } from "react-native";
 import React, { useState } from "react";
+import "react-native-get-random-values";
+
+import { v4 as uuidv4 } from 'uuid';
+
 
 import colors from "tailwindcss/colors";
 
@@ -15,10 +19,14 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [inputIsFocused, setInputIsFocused] = useState(false);
 
-  const { tasks } = useTaks();
-  console.log(tasks);
+  const { tasks, handleAddTask } = useTaks();
 
   function handleSubmitingEnd() {
+
+    if (inputValue) {
+      handleAddTask({desc: inputValue, isCompleted: false, id: uuidv4() })
+    }
+
     setInputIsFocused(false);
     setInputValue("");
   }
@@ -42,7 +50,7 @@ export default function Home() {
           onChangeText={setInputValue}
           value={inputValue}
         />
-        <Button className="bg-blueDark">
+        <Button className="bg-blueDark" onPress={() => handleAddTask({desc: inputValue, isCompleted: false, id: uuidv4() })}>
           <Feather name="plus-circle" size={24} color={colors.white} />
         </Button>
       </View>
